@@ -5,6 +5,8 @@ import 'package:graphite/core/matrix.dart';
 import 'package:graphite/core/typings.dart';
 
 double getHighestHeightInARow(Matrix matrix, double defaultCellHeight, int y) {
+  //TODO:
+  return defaultCellHeight;
   return matrix.s[y].fold(
       0,
       (acc, cell) => max(
@@ -19,6 +21,8 @@ double getHighestHeightInARow(Matrix matrix, double defaultCellHeight, int y) {
 }
 
 double getWidestWidthInAColumn(Matrix matrix, double defaultCellWidth, int x) {
+  //TODO:
+  return defaultCellWidth;
   double acc = 0;
   for (var y = 0; y < matrix.height(); y++) {
     final cell = matrix.getByCoords(x, y);
