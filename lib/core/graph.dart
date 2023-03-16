@@ -3,7 +3,9 @@ import 'package:graphite/core/matrix.dart';
 import 'package:graphite/core/traverse_queue.dart';
 import 'package:graphite/core/typings.dart';
 
-const MaxIterations = 1000;
+class GraphUtils {
+  static int maxIterations = 100000;
+}
 
 class Graph extends GraphMatrix {
   Graph({required List<NodeInput> list, required bool centred})
@@ -93,7 +95,7 @@ class Graph extends GraphMatrix {
       iterations++;
       NodeOutput item = levelQueue.shift();
       traverseItem(item, state, levelQueue);
-      if (iterations > MaxIterations) {
+      if (iterations > GraphUtils.maxIterations) {
         throw "max iterations reached";
       }
     }
