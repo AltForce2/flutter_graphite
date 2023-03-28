@@ -25,6 +25,11 @@ class Matrix {
 
   void _calculateWidth() {
     _width = this.s.fold(0, (w, row) => row.length > w ? row.length : w);
+
+    this._sInMap = this.s.asMap();
+    this._sInMap.forEach((key, value) {
+      this._sInMapAndRowInMap[key] = value.asMap();
+    });
   }
 
   int width() => _width;
@@ -83,7 +88,7 @@ class Matrix {
     if (x >= this.width()) {
       return false;
     }
-    return this.s.asMap().entries.any((data) {
+    return this._sInMap.entries.any((data) {
       var index = data.key;
       var row = data.value;
       return index >= y && x < row.length && row[x] != null;
@@ -94,7 +99,7 @@ class Matrix {
     if (this.height() == 0) {
       return 0;
     }
-    final entries = this.s.asMap().entries.toList();
+    final entries = this._sInMap.entries.toList();
     final idx = entries.indexWhere((data) {
       var row = data.value;
       return row.length == 0 || x >= row.length || row[x] == null;
@@ -132,10 +137,12 @@ class Matrix {
 
   List<int>? find(bool Function(NodeOutput) f) {
     List<int>? result;
-    this.s.asMap().entries.any((rowEntry) {
+
+    _sInMapAndRowInMap.entries.any((rowEntry) {
       var y = rowEntry.key;
       var row = rowEntry.value;
-      return row.asMap().entries.any((columnEntry) {
+
+      return row.entries.any((columnEntry) {
         var x = columnEntry.key;
         var cell = columnEntry.value;
         if (cell == null) return false;
@@ -146,15 +153,18 @@ class Matrix {
         return false;
       });
     });
+
     return result;
   }
 
   FindNodeResult? findNode(bool Function(NodeOutput) f) {
     FindNodeResult? result;
-    this.s.asMap().entries.any((rowEntry) {
+
+    _sInMapAndRowInMap.entries.any((rowEntry) {
       var y = rowEntry.key;
       var row = rowEntry.value;
-      return row.asMap().entries.any((columnEntry) {
+
+      return row.entries.any((columnEntry) {
         var x = columnEntry.key;
         var cell = columnEntry.value;
         if (cell == null) return false;
@@ -166,6 +176,7 @@ class Matrix {
         return false;
       });
     });
+
     return result;
   }
 
@@ -226,10 +237,12 @@ class Matrix {
 
   Map<String, MatrixNode> normalize() {
     Map<String, MatrixNode> acc = Map();
-    this.s.asMap().entries.forEach((rowEntry) {
+
+    _sInMapAndRowInMap.entries.forEach((rowEntry) {
       var y = rowEntry.key;
       var row = rowEntry.value;
-      row.asMap().entries.forEach((columnEntry) {
+
+      row.entries.forEach((columnEntry) {
         var x = columnEntry.key;
         var cell = columnEntry.value;
         if (cell != null) {
@@ -240,16 +253,19 @@ class Matrix {
         }
       });
     });
+
     return acc;
   }
 
   Matrix rotate() {
     var newMtx = Matrix();
-    s.asMap().forEach((y, row) {
-      row.asMap().forEach((x, cell) {
+
+    _sInMapAndRowInMap.forEach((y, row) {
+      row.forEach((x, cell) {
         newMtx.put(y, x, cell);
       });
     });
+
     newMtx.orientation = orientation == MatrixOrientation.Horizontal
         ? MatrixOrientation.Vertical
         : MatrixOrientation.Horizontal;
@@ -283,6 +299,9 @@ class Matrix {
 
   MatrixOrientation orientation;
   List<List<MatrixCell?>> s;
+
+  Map<int, List<MatrixCell?>> _sInMap = {};
+  Map<int, Map<int, MatrixCell?>> _sInMapAndRowInMap = {};
 }
 
 class MatrixCell {

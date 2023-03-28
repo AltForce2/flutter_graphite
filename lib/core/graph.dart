@@ -117,9 +117,13 @@ class Graph extends GraphMatrix {
     if (roots.length == 0) {
       throw "no graph roots found";
     }
-    var mtx = state.mtx, queue = state.queue;
+
+    Matrix mtx = state.mtx;
+    TraverseQueue queue = state.queue;
+
     queue.add(incomeId: null, bufferQueue: null, items: roots);
     mtx = traverseList(state);
+
     return mtx;
   }
 }
