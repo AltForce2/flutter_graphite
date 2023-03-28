@@ -230,9 +230,18 @@ class _GraphiteCanvasState extends State<GraphiteCanvas> {
 
   List<MatrixNode> _getNodes() {
     List<MatrixNode> items = [];
-    for (int y = 0; y < widget.matrix.height(); y++) {
-      for (int x = 0; x < widget.matrix.width(); x++) {
-        final cell = widget.matrix.getByCoords(x, y);
+
+    final int height = widget.matrix.height();
+    final int width = widget.matrix.width();
+
+    for (int y = 0; y < height; y++) {
+      for (int x = 0; x < width; x++) {
+        final cell = widget.matrix.getByCoords(
+          x,
+          y,
+          width: width,
+          height: height,
+        );
         if (cell == null) continue;
         cell.all.forEach((n) {
           final node = MatrixNode.fromNodeOutput(x: x, y: y, nodeOutput: n);

@@ -110,12 +110,26 @@ class GraphBasic {
   }
 
   NodeType nodeType(String id) {
-    if (isRoot(id) && isSplit(id)) return NodeType.rootSplit;
-    if (isRoot(id)) return NodeType.rootSimple;
-    if (isSplit(id) && isJoin(id)) return NodeType.splitJoin;
-    if (isSplit(id)) return NodeType.split;
-    if (isJoin(id)) return NodeType.join;
-    return NodeType.simple;
+    final bool _isRoot = isRoot(id);
+    final bool _isSplit = isSplit(id);
+
+    if (_isRoot) {
+      if (_isSplit) {
+        return NodeType.rootSplit;
+      } else {
+        return NodeType.rootSimple;
+      }
+    } else if (_isSplit) {
+      return NodeType.split;
+    } else {
+      final bool _isJoin = isJoin(id);
+
+      if (_isJoin) {
+        return NodeType.join;
+      } else {
+        return NodeType.simple;
+      }
+    }
   }
 
   List<NodeInput> getOutcomesArray(String itemId) {

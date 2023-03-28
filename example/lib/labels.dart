@@ -42,15 +42,18 @@ class LabelsPageState extends State<LabelsPage> {
       body: Stack(
         children: [
           DirectGraph(
-            list: list,
+            controller: DirectGraphController(
+              list,
+              orientation: _isVertical
+                  ? MatrixOrientation.Vertical
+                  : MatrixOrientation.Horizontal,
+              centered: _isCentered,
+            ),
             defaultCellSize: const Size(100.0, 100.0),
             cellPadding: _isVertical
                 ? const EdgeInsets.symmetric(vertical: 30, horizontal: 5)
                 : const EdgeInsets.symmetric(vertical: 5, horizontal: 30),
             contactEdgesDistance: 10.0,
-            orientation: _isVertical
-                ? MatrixOrientation.Vertical
-                : MatrixOrientation.Horizontal,
             edgeLabels: EdgeLabels(
                 alignment: EdgeLabelTextAlignment.before,
                 positionPriority: EdgeLabelPositionPriority.horizontal,
@@ -78,7 +81,6 @@ class LabelsPageState extends State<LabelsPage> {
                                           Theme.of(context).backgroundColor),
                             ),
                     )),
-            centered: _isCentered,
             minScale: .1,
             maxScale: 1,
           ),

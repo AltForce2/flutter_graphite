@@ -16,7 +16,7 @@ class DirectGraph extends StatefulWidget {
   /// Graph source defined as [list] of [NodeInput]'s. Root or entry point for
   /// graph is selected as first found node without incomes or the first node
   /// in the [list] if there's no nodes without incomes.
-  final List<NodeInput> list;
+  final DirectGraphController controller;
 
   /// Default cell size for any node where [NodeInput.size] is null.
   final Size defaultCellSize;
@@ -27,16 +27,16 @@ class DirectGraph extends StatefulWidget {
   /// if set to true all node outcomes will be centered relatively to it's parent
   /// as much as it's possible in rectangular space. Useful to create tree-like
   /// structures with [Alignment.center]. Defaults to false.
-  final bool centered;
+  // final bool centered;
 
   /// Distance between backward and forward oriented edge when they enter the same node.
   /// Defaults to 5.0. Set it to zero if you need to center all edges entry points.
   final double contactEdgesDistance;
 
-  /// Output graph with [MatrixOrientation.Horizontal] orientation or
-  /// [MatrixOrientation.Vertical]. Use [MatrixOrientation.Horizontal] for row
-  /// views and [MatrixOrientation.Vertical] for column views.
-  final MatrixOrientation orientation;
+  // /// Output graph with [MatrixOrientation.Horizontal] orientation or
+  // /// [MatrixOrientation.Vertical]. Use [MatrixOrientation.Horizontal] for row
+  // /// views and [MatrixOrientation.Vertical] for column views.
+  // final MatrixOrientation orientation;
 
   /// is the length (in pixels) of each of the 2 lines making the arrow.
   /// Ignored if using custom [pathBuilder] is set.
@@ -246,16 +246,14 @@ class DirectGraph extends StatefulWidget {
   /// See [GestureDetector] for details.
   DirectGraph({
     Key? key,
-    required this.list,
+    required this.controller,
     required this.defaultCellSize,
     required this.cellPadding,
     this.clipBehavior = Clip.hardEdge,
     this.transformationController,
     this.contentWrapperBuilder,
-    this.centered = false,
     this.nodeBuilder,
     this.contactEdgesDistance = 5.0,
-    this.orientation = MatrixOrientation.Horizontal,
     this.tipAngle = math.pi * 0.1,
     this.tipLength = 10.0,
     this.maxScale = 2.5,
@@ -297,10 +295,6 @@ class DirectGraph extends StatefulWidget {
 }
 
 class _DirectGraphState extends State<DirectGraph> {
-  Graph toGraph(List<NodeInput> list, bool centered) {
-    return Graph(list: list, centred: centered);
-  }
-
   Widget getRoot(BuildContext context, Matrix mtx) {
     return GraphiteRoot(
       mtx: mtx,
@@ -311,7 +305,7 @@ class _DirectGraphState extends State<DirectGraph> {
       clipBehavior: widget.clipBehavior,
       transformationController: widget.transformationController,
       contactEdgesDistance: widget.contactEdgesDistance,
-      orientation: widget.orientation,
+      orientation: widget.controller.orientation,
       builder: widget.nodeBuilder,
       contentWrapperBuilder: widget.contentWrapperBuilder,
       tipLength: widget.tipLength,
@@ -351,11 +345,31 @@ class _DirectGraphState extends State<DirectGraph> {
 
   @override
   Widget build(BuildContext context) {
-    var graph = this.toGraph(widget.list, widget.centered);
-    var mtx = graph.traverse();
-    if (widget.orientation == MatrixOrientation.Vertical) {
+    return getRoot(context, widget.controller.mtx);
+  }
+}
+
+class DirectGraphController {
+  final List<NodeInput> list;
+  final bool centered;
+  final MatrixOrientation orientation;
+
+  late Matrix mtx;
+
+  DirectGraphController(
+    this.list, {
+    this.centered = false,
+    this.orientation = MatrixOrientation.Horizontal,
+  }) {
+    var graph = this.toGraph(list, centered);
+    mtx = graph.traverse();
+
+    if (orientation == MatrixOrientation.Vertical) {
       mtx = mtx.rotate();
     }
-    return getRoot(context, mtx);
+  }
+
+  Graph toGraph(List<NodeInput> list, bool centered) {
+    return Graph(list: list, centred: centered);
   }
 }

@@ -70,12 +70,15 @@ class FlowchartPageState extends State<FlowchartPage> {
       body: Stack(
         children: [
           DirectGraph(
-            list: list,
+            controller: DirectGraphController(
+              list,
+              orientation: MatrixOrientation.Vertical,
+              centered: true,
+            ),
             defaultCellSize: const Size(250.0, 100.0),
             cellPadding:
                 const EdgeInsets.symmetric(vertical: 30, horizontal: 5),
             contactEdgesDistance: 0,
-            orientation: MatrixOrientation.Vertical,
             nodeBuilder: (BuildContext context, NodeInput node) => Padding(
                 padding: const EdgeInsets.all(5), child: _buildNode(node)),
             contentWrapperBuilder:
@@ -89,7 +92,6 @@ class FlowchartPageState extends State<FlowchartPage> {
                 ],
               ),
             ),
-            centered: true,
             minScale: .1,
             maxScale: 1,
           ),

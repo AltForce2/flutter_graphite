@@ -272,13 +272,15 @@ class DigimonPageState extends State<DigimonPage>
       body: Container(
         color: Colors.white,
         child: DirectGraph(
-          list: imagePreset,
+          controller: DirectGraphController(
+            imagePreset,
+            orientation: MatrixOrientation.Horizontal,
+            centered: true,
+          ),
           defaultCellSize: const Size(100.0, 100.0),
           cellPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
           contactEdgesDistance: 5.0,
-          orientation: MatrixOrientation.Horizontal,
           clipBehavior: Clip.none,
-          centered: true,
           minScale: .1,
           maxScale: 3,
           overlayBuilder:

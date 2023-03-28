@@ -1,6 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:flutter/foundation.dart';
-
 import 'package:graphite/core/typings.dart';
 
 class FindNodeResult {
@@ -24,19 +21,13 @@ class Matrix {
       : this.s = [],
         this.orientation = MatrixOrientation.Horizontal;
 
-  List<List<MatrixCell?>> _oldS = [];
-  int _oldWidth = 0;
+  int _width = 0;
 
-  int width() {
-    final bool oldIsEqual = listEquals(this.s, _oldS);
-
-    if (!oldIsEqual) {
-      _oldWidth = this.s.fold(0, (w, row) => row.length > w ? row.length : w);
-      _oldS = List.from(this.s);
-    }
-
-    return _oldWidth;
+  void _calculateWidth() {
+    _width = this.s.fold(0, (w, row) => row.length > w ? row.length : w);
   }
+
+  int width() => _width;
 
   int height() {
     return this.s.length;
@@ -129,12 +120,14 @@ class Matrix {
   void insertRowBefore(int y) {
     List<MatrixCell?> row = List.filled(this.width(), null, growable: true);
     this.s.insert(y, row);
+    _calculateWidth();
   }
 
   void insertColumnBefore(int x) {
     this.s.forEach((row) {
       row.insert(x, null);
     });
+    _calculateWidth();
   }
 
   List<int>? find(bool Function(NodeOutput) f) {
@@ -176,10 +169,19 @@ class Matrix {
     return result;
   }
 
-  MatrixCell? getByCoords(int x, int y) {
-    if (x >= this.width() || y >= this.height()) {
+  MatrixCell? getByCoords(
+    int x,
+    int y, {
+    int? width,
+    int? height,
+  }) {
+    final int _width = width ?? this.width();
+    final int _height = height ?? this.height();
+
+    if (x >= _width || y >= _height) {
       return null;
     }
+
     return this.s[y][x];
   }
 
@@ -204,6 +206,7 @@ class Matrix {
         current.margin != item.anchorMargin) {
       current.add(item);
     }
+    _calculateWidth();
   }
 
   void put(int x, int y, MatrixCell? item) {
@@ -214,6 +217,7 @@ class Matrix {
       this.extendWidth(x + 1);
     }
     this.s[y][x] = item;
+    _calculateWidth();
   }
 
   bool isAllChildrenOnMatrix(MatrixCell cell) {
@@ -344,4 +348,16 @@ class MatrixCell {
 
   @override
   int get hashCode => start.hashCode ^ end.hashCode ^ full.hashCode;
+
+  MatrixCell copyWith({
+    NodeOutput? start,
+    NodeOutput? end,
+    NodeOutput? full,
+  }) {
+    return MatrixCell(
+      start: start ?? this.start,
+      end: end ?? this.end,
+      full: full ?? this.full,
+    );
+  }
 }

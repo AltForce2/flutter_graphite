@@ -50,13 +50,15 @@ class CustomEdgesPageState extends State<CustomEdgesPage> {
           leading: const Icon(Icons.view_comfy),
           title: const Text('Custom Edges Example')),
       body: DirectGraph(
-        list: list,
+        controller: DirectGraphController(
+          list,
+          orientation: MatrixOrientation.Vertical,
+          centered: false,
+        ),
         defaultCellSize: const Size(104.0, 104.0),
         cellPadding: const EdgeInsets.all(14),
         contactEdgesDistance: 5.0,
-        orientation: MatrixOrientation.Vertical,
         pathBuilder: customEdgePathBuilder,
-        centered: false,
         nodeBuilder: (ctx, node) {
           return Card(
             child: Center(
