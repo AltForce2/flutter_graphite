@@ -320,9 +320,7 @@ class GraphMatrix extends GraphBasic {
         ? this.getCenterYAmongIncomes(item, mtx)
         : this.getLowestYAmongIncomes(item, mtx);
     incomes.forEach((String incomeId) {
-      final found = mtx.findNode((NodeOutput n) {
-        return n.id == incomeId;
-      });
+      final found = mtx.findNode(incomeId);
       if (found == null) throw "income $incomeId was not found";
       final y = found.coords[1], income = found.item;
       if (directY == y) {
@@ -365,15 +363,15 @@ class GraphMatrix extends GraphBasic {
 
   void markIncomesAsPassed(Matrix mtx, NodeOutput item) {
     item.renderIncomes.forEach((String incomeId) {
-      var found = mtx.findNode((NodeOutput n) {
-        return n.id == incomeId;
-      });
+      final found = mtx.findNode(incomeId);
+
       if (found == null) throw "income $incomeId not found on matrix";
       var coords = found.coords, income = found.item;
       income.childrenOnMatrix =
           min((income.childrenOnMatrix ?? 0) + 1, income.next.length);
       mtx.insert(coords[0], coords[1], income);
     });
+
     return;
   }
 

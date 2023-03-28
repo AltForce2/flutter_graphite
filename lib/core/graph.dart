@@ -118,9 +118,7 @@ class Graph extends GraphMatrix {
       throw "no graph roots found";
     }
 
-    Matrix mtx = state.mtx;
-    TraverseQueue queue = state.queue;
-
+    var mtx = state.mtx, queue = state.queue;
     queue.add(incomeId: null, bufferQueue: null, items: roots);
     mtx = traverseList(state);
 

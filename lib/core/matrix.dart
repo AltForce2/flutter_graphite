@@ -21,17 +21,6 @@ class Matrix {
       : this.s = [],
         this.orientation = MatrixOrientation.Horizontal;
 
-  int _width = 0;
-
-  void _calculateWidth() {
-    _width = this.s.fold(0, (w, row) => row.length > w ? row.length : w);
-
-    this._sInMap = this.s.asMap();
-    this._sInMap.forEach((key, value) {
-      this._sInMapAndRowInMap[key] = value.asMap();
-    });
-  }
-
   int width() => _width;
 
   int height() {
@@ -88,7 +77,8 @@ class Matrix {
     if (x >= this.width()) {
       return false;
     }
-    return this._sInMap.entries.any((data) {
+
+    return this.s.asMap().entries.any((data) {
       var index = data.key;
       var row = data.value;
       return index >= y && x < row.length && row[x] != null;
@@ -99,7 +89,7 @@ class Matrix {
     if (this.height() == 0) {
       return 0;
     }
-    final entries = this._sInMap.entries.toList();
+    final entries = this.s.asMap().entries.toList();
     final idx = entries.indexWhere((data) {
       var row = data.value;
       return row.length == 0 || x >= row.length || row[x] == null;
@@ -126,6 +116,7 @@ class Matrix {
     List<MatrixCell?> row = List.filled(this.width(), null, growable: true);
     this.s.insert(y, row);
     _calculateWidth();
+    // _refreshSVariables("insertRowBefore");
   }
 
   void insertColumnBefore(int x) {
@@ -138,9 +129,9 @@ class Matrix {
   List<int>? find(bool Function(NodeOutput) f) {
     List<int>? result;
 
-    _sInMapAndRowInMap.entries.any((rowEntry) {
+    this.s.asMap().entries.any((rowEntry) {
       var y = rowEntry.key;
-      var row = rowEntry.value;
+      var row = rowEntry.value.asMap();
 
       return row.entries.any((columnEntry) {
         var x = columnEntry.key;
@@ -157,18 +148,19 @@ class Matrix {
     return result;
   }
 
-  FindNodeResult? findNode(bool Function(NodeOutput) f) {
+  FindNodeResult? findNode(String incomeId) {
+    // return findNodeBinarySearch(s, incomeId);
     FindNodeResult? result;
 
-    _sInMapAndRowInMap.entries.any((rowEntry) {
+    this.s.asMap().entries.any((rowEntry) {
       var y = rowEntry.key;
-      var row = rowEntry.value;
+      var row = rowEntry.value.asMap();
 
       return row.entries.any((columnEntry) {
         var x = columnEntry.key;
         var cell = columnEntry.value;
         if (cell == null) return false;
-        final i = cell.all.indexWhere((c) => f(c));
+        final i = cell.all.indexWhere((c) => c.id == incomeId);
         if (i != -1) {
           result = FindNodeResult(coords: [x, y], item: cell.all[i]);
           return true;
@@ -203,6 +195,7 @@ class Matrix {
     if (this.width() <= x) {
       this.extendWidth(x + 1);
     }
+
     final current = s[y][x];
     if (current == null) {
       this.s[y][x] = !item.isAnchor
@@ -238,9 +231,9 @@ class Matrix {
   Map<String, MatrixNode> normalize() {
     Map<String, MatrixNode> acc = Map();
 
-    _sInMapAndRowInMap.entries.forEach((rowEntry) {
+    this.s.asMap().entries.forEach((rowEntry) {
       var y = rowEntry.key;
-      var row = rowEntry.value;
+      var row = rowEntry.value.asMap();
 
       row.entries.forEach((columnEntry) {
         var x = columnEntry.key;
@@ -260,8 +253,8 @@ class Matrix {
   Matrix rotate() {
     var newMtx = Matrix();
 
-    _sInMapAndRowInMap.forEach((y, row) {
-      row.forEach((x, cell) {
+    this.s.asMap().forEach((y, row) {
+      row.asMap().forEach((x, cell) {
         newMtx.put(y, x, cell);
       });
     });
@@ -300,8 +293,10 @@ class Matrix {
   MatrixOrientation orientation;
   List<List<MatrixCell?>> s;
 
-  Map<int, List<MatrixCell?>> _sInMap = {};
-  Map<int, Map<int, MatrixCell?>> _sInMapAndRowInMap = {};
+  int _width = 0;
+  void _calculateWidth() {
+    _width = this.s.fold(0, (w, row) => row.length > w ? row.length : w);
+  }
 }
 
 class MatrixCell {
