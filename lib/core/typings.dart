@@ -1,4 +1,7 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 
 enum NodeType {
   unknown,
@@ -87,6 +90,16 @@ class EdgeInput {
         "outcome": outcome,
         "type": typeToString(),
       };
+
+  @override
+  bool operator ==(covariant EdgeInput other) {
+    if (identical(this, other)) return true;
+
+    return other.outcome == outcome && other.type == type;
+  }
+
+  @override
+  int get hashCode => outcome.hashCode ^ type.hashCode;
 }
 
 class NodeSize {
@@ -107,6 +120,16 @@ class NodeSize {
         "width": width,
         "height": height,
       };
+
+  @override
+  bool operator ==(covariant NodeSize other) {
+    if (identical(this, other)) return true;
+
+    return other.width == width && other.height == height;
+  }
+
+  @override
+  int get hashCode => width.hashCode ^ height.hashCode;
 }
 
 class NodeInput {
@@ -148,6 +171,16 @@ class NodeInput {
         "next": List<dynamic>.from(next.map((x) => x.toJson())),
         "size": size == null ? null : size!.toJson(),
       };
+
+  @override
+  bool operator ==(covariant NodeInput other) {
+    if (identical(this, other)) return true;
+
+    return other.id == id && other.size == size && listEquals(other.next, next);
+  }
+
+  @override
+  int get hashCode => size.hashCode ^ id.hashCode ^ next.hashCode;
 }
 
 enum AnchorType {
@@ -216,6 +249,30 @@ class MatrixNode extends NodeOutput {
   NodeInput toInput() {
     return NodeInput(id: id, next: next, size: size);
   }
+
+  @override
+  bool operator ==(covariant MatrixNode other) {
+    if (identical(this, other)) return true;
+
+    return other.id == id &&
+        other.from == from &&
+        other.to == to &&
+        other.anchorType == anchorType &&
+        other.orientation == orientation &&
+        other.isAnchor == isAnchor &&
+        listEquals(other.passedIncomes, passedIncomes) &&
+        listEquals(other.renderIncomes, renderIncomes) &&
+        other.childrenOnMatrix == childrenOnMatrix &&
+        mapEquals(other.anchors, anchors) &&
+        other.anchorMargin == anchorMargin &&
+        other.size == size &&
+        listEquals(other.next, next) &&
+        other.x == x &&
+        other.y == y;
+  }
+
+  @override
+  int get hashCode => x.hashCode ^ y.hashCode ^ super.hashCode;
 }
 
 class NodeOutput extends NodeInput {
@@ -247,6 +304,39 @@ class NodeOutput extends NodeInput {
   List<String> passedIncomes = [];
   List<String> renderIncomes = [];
   int? childrenOnMatrix;
+
+  @override
+  bool operator ==(covariant NodeOutput other) {
+    if (identical(this, other)) return true;
+
+    return other.id == id &&
+        other.from == from &&
+        other.to == to &&
+        other.anchorType == anchorType &&
+        other.orientation == orientation &&
+        other.isAnchor == isAnchor &&
+        listEquals(other.passedIncomes, passedIncomes) &&
+        listEquals(other.renderIncomes, renderIncomes) &&
+        other.childrenOnMatrix == childrenOnMatrix &&
+        mapEquals(other.anchors, anchors) &&
+        other.anchorMargin == anchorMargin &&
+        other.size == size &&
+        listEquals(other.next, next);
+  }
+
+  @override
+  int get hashCode =>
+      anchorType.hashCode ^
+      from.hashCode ^
+      to.hashCode ^
+      orientation.hashCode ^
+      isAnchor.hashCode ^
+      passedIncomes.hashCode ^
+      renderIncomes.hashCode ^
+      childrenOnMatrix.hashCode ^
+      anchors.hashCode ^
+      anchorMargin.hashCode ^
+      super.hashCode;
 }
 
 class LoopNode {
@@ -263,6 +353,26 @@ class LoopNode {
   int x;
   int y;
   bool isSelfLoop;
+
+  @override
+  bool operator ==(covariant LoopNode other) {
+    if (identical(this, other)) return true;
+
+    return other.id == id &&
+        other.isSelfLoop == isSelfLoop &&
+        other.node == node &&
+        other.x == x &&
+        other.y == y;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        node.hashCode ^
+        x.hashCode ^
+        y.hashCode ^
+        isSelfLoop.hashCode;
+  }
 }
 
 class Edge {
@@ -272,4 +382,19 @@ class Edge {
   final EdgeArrowType arrowType;
 
   Edge(this.points, this.from, this.to, this.arrowType);
+
+  @override
+  bool operator ==(covariant Edge other) {
+    if (identical(this, other)) return true;
+
+    return listEquals(other.points, points) &&
+        other.from == from &&
+        other.to == to &&
+        other.arrowType == arrowType;
+  }
+
+  @override
+  int get hashCode {
+    return points.hashCode ^ from.hashCode ^ to.hashCode ^ arrowType.hashCode;
+  }
 }
