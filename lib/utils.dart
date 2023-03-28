@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/widgets.dart';
 import 'package:graphite/core/matrix.dart';
 import 'package:graphite/core/typings.dart';
@@ -7,35 +5,35 @@ import 'package:graphite/core/typings.dart';
 double getHighestHeightInARow(Matrix matrix, double defaultCellHeight, int y) {
   //TODO:
   return defaultCellHeight;
-  return matrix.s[y].fold(
-      0,
-      (acc, cell) => max(
-          acc,
-          cell == null
-              ? defaultCellHeight
-              : cell.all.fold(
-                  0,
-                  (prev, node) => node.size == null
-                      ? defaultCellHeight
-                      : node.size!.height)));
+  // return matrix.s[y].fold(
+  //     0,
+  //     (acc, cell) => max(
+  //         acc,
+  //         cell == null
+  //             ? defaultCellHeight
+  //             : cell.all.fold(
+  //                 0,
+  //                 (prev, node) => node.size == null
+  //                     ? defaultCellHeight
+  //                     : node.size!.height)));
 }
 
 double getWidestWidthInAColumn(Matrix matrix, double defaultCellWidth, int x) {
   //TODO:
   return defaultCellWidth;
-  double acc = 0;
-  for (var y = 0; y < matrix.height(); y++) {
-    final cell = matrix.getByCoords(x, y);
-    acc = max(
-        acc,
-        cell == null
-            ? defaultCellWidth
-            : cell.all.fold(
-                0,
-                (prev, node) =>
-                    node.size == null ? defaultCellWidth : node.size!.width));
-  }
-  return acc;
+  // double acc = 0;
+  // for (var y = 0; y < matrix.height(); y++) {
+  //   final cell = matrix.getByCoords(x, y);
+  //   acc = max(
+  //       acc,
+  //       cell == null
+  //           ? defaultCellWidth
+  //           : cell.all.fold(
+  //               0,
+  //               (prev, node) =>
+  //                   node.size == null ? defaultCellWidth : node.size!.width));
+  // }
+  // return acc;
 }
 
 double getWidthOfCanvas(

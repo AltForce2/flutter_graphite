@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:graphite/core/typings.dart';
 
 class FindNodeResult {
@@ -21,8 +22,18 @@ class Matrix {
       : this.s = [],
         this.orientation = MatrixOrientation.Horizontal;
 
+  List<List<MatrixCell?>> _oldS = [];
+  int _oldWidth = 0;
+
   int width() {
-    return this.s.fold(0, (w, row) => row.length > w ? row.length : w);
+    final bool oldIsEqual = listEquals(this.s, _oldS);
+
+    if (!oldIsEqual) {
+      _oldWidth = this.s.fold(0, (w, row) => row.length > w ? row.length : w);
+      _oldS = List.from(this.s);
+    }
+
+    return _oldWidth;
   }
 
   int height() {
