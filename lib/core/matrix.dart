@@ -195,6 +195,7 @@ class Matrix {
     if (this.width() <= x) {
       this.extendWidth(x + 1);
     }
+    _calculateWidth();
 
     final current = s[y][x];
     if (current == null) {
@@ -210,7 +211,6 @@ class Matrix {
         current.margin != item.anchorMargin) {
       current.add(item);
     }
-    _calculateWidth();
   }
 
   void put(int x, int y, MatrixCell? item) {
