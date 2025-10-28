@@ -66,19 +66,19 @@ class LabelsPageState extends State<LabelsPage> {
                                 "${edge.from.id}=>${edge.to.id}",
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodyText2!
+                                    .bodyMedium!
                                     .copyWith(
                                         backgroundColor:
-                                            Theme.of(context).backgroundColor),
+                                            Theme.of(context).colorScheme.surface),
                               ))
                           : Text(
                               "${edge.from.id}=>${edge.to.id}",
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText2!
+                                        .bodyMedium!
                                   .copyWith(
                                       backgroundColor:
-                                          Theme.of(context).backgroundColor),
+                                          Theme.of(context).colorScheme.surface),
                             ),
                     )),
             minScale: .1,

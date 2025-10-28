@@ -120,7 +120,7 @@ class Start extends StatelessWidget {
       child: Center(
         child: Text(
           data.text,
-          style: Theme.of(context).textTheme.subtitle2,
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
       ),
     );
@@ -145,7 +145,7 @@ class Document extends StatelessWidget {
       child: Center(
         child: Text(
           data.text,
-          style: Theme.of(context).textTheme.subtitle2,
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
       ),
     );
@@ -170,7 +170,7 @@ class Process extends StatelessWidget {
       child: Center(
         child: Text(
           data.text,
-          style: Theme.of(context).textTheme.subtitle2,
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
       ),
     );
@@ -205,7 +205,7 @@ class Decision extends StatelessWidget {
           child: Center(
             child: Text(
               data.text,
-              style: Theme.of(context).textTheme.subtitle2,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
         )
@@ -232,7 +232,7 @@ class End extends StatelessWidget {
       child: Center(
         child: Text(
           data.text,
-          style: Theme.of(context).textTheme.subtitle2,
+            style: Theme.of(context).textTheme.bodyMedium,
         ),
       ),
     );

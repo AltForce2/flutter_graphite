@@ -229,11 +229,11 @@ class DigimonPageState extends State<DigimonPage>
                       children: [
                         Text(
                           _currentNodeInfo!.data.title,
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
                         Text(
                           "Level: ${_currentNodeInfo!.data.level}",
-                          style: Theme.of(context).textTheme.subtitle2,
+                          style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ],
                     ),
